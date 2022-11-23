@@ -1,0 +1,30 @@
+import vedro
+from vedro_replay import replay
+from d42 import from_native
+
+from contexts.api import golden_response, testing_response
+from helpers.helpers import {{context_method_name}}
+
+
+class Scenario(vedro.Scenario):
+    subject = "do request: {{api_route}}"
+
+    @replay("requests/{{file_requests}}")
+    def __init__(self, request):
+        self.request = request
+
+    async def given_golden_response(self):
+        self.golden_response = await golden_response(self.request, {{context_method_name}})
+
+    async def when_user_sends_request(self):
+        self.testing_response = await testing_response(self.request, {{context_method_name}})
+
+    def then_it_should_return_same_status(self):
+        assert self.golden_response.status == self.testing_response.status
+
+    def and_it_should_return_same_headers(self):
+        assert self.golden_response.headers == from_native(self.testing_response.headers)
+
+    def and_it_should_return_same_body(self):
+        assert self.golden_response.body == from_native(self.testing_response.body)
+
