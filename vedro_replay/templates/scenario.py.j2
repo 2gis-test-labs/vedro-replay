@@ -23,8 +23,8 @@ class Scenario(vedro.Scenario):
         assert self.golden_response.status == self.testing_response.status
 
     def and_it_should_return_same_headers(self):
-        assert self.golden_response.headers == from_native(self.testing_response.headers)
+        assert from_native(self.golden_response.headers) == self.testing_response.headers
 
     def and_it_should_return_same_body(self):
-        assert self.golden_response.body == from_native(self.testing_response.body)
+        assert from_native(self.golden_response.body) == self.testing_response.body
 
